@@ -1,0 +1,42 @@
+# .NET-specific ignores
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+_build/
+
+# Rider project files
+.idea/
+*.sln.iml
+
+# VS Code settings
+.vscode/
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+
+# Dotnet tools
+*.dbmdl
+*.pdb
+*.cache
+*.log
+*.vspscc
+*.vssscc
+
+# Local configuration
+appsettings.Development.json
+
+# Logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
