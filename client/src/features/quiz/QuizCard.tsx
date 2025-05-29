@@ -8,6 +8,7 @@ type Props = {
   onSelect: (choiceId: string) => void;
   showHint: boolean;
   onShowHint: () => void;
+  const isMultipleChoice = question.choices.filter(c => c.isCorrect).length > 1;
 };
 
 export default function QuizCard({ index, question, selectedChoiceId, onSelect, onShowHint, showHint }: Props) {
