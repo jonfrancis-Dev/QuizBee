@@ -1,3 +1,4 @@
+using Application.Exceptions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,19 @@ public class SubmitAnswersCommand
     {
         public async Task<QuizSubmission> Handle(Command request, CancellationToken cancellationToken)
         {
+
+            // Check if submission already exists for this email
+             // Check if a submission already exists for this email
+        var existingSubmission = await context.QuizSubmissions
+            .AnyAsync(s => s.UserEmail == request.UserEmail, cancellationToken);
+
+        if (existingSubmission)
+        {
+                throw new AppException(
+        $"A quiz submission has already been received for '{request.UserEmail}'. " +
+        $"Each user may only submit once.");
+        }
+
             var submission = new QuizSubmission
             {
                 UserEmail = request.UserEmail,

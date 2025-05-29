@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Domain.Entities;
 
 public class SubmittedAnswer
@@ -11,6 +12,7 @@ public class SubmittedAnswer
     public Question? Question { get; set; }
 
     public string? QuizSubmissionId { get; set; }
+    [JsonIgnore]
     public QuizSubmission? QuizSubmission { get; set; }
 
     public string? SelectedChoiceId { get; set; }
