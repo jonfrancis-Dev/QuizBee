@@ -7,14 +7,14 @@ type Props = {
     email: string;
 };
 
-export default function QuizResults({ answers, result, email }: Props) {
+export default function QuizResults({ result, email }: Props) {
     return (
         <Box sx={{ p: 3 }}>
             <Typography variant="h5" gutterBottom>
                 Results for {email}
             </Typography>
             <Typography variant="body1" gutterBottom>
-                Score: {result.score} / {answers.length - 1}
+                Score: {result.score} / 10
             </Typography>
             <Typography variant="body1" gutterBottom>
                 Percentage: {result.percentage}%

@@ -6,7 +6,7 @@ namespace Domain.Entities;
 
 public class AnswerSelection
 {
-    // This table connects submitted answers to chosen choices.
+    // This table connects submitted answers to chosen choices. (Future Addition in client side)
     [Key]
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public string? SubmittedAnswerId { get; set; }
