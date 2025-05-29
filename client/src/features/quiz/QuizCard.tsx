@@ -4,19 +4,23 @@ import type { Question } from "../../lib/types";
 type Props = {
   index: number;
   question: Question;
-  selectedChoiceId?: string;
+  selectedChoiceIds?: string[];
   onSelect: (choiceId: string) => void;
   showHint: boolean;
   onShowHint: () => void;
-  const isMultipleChoice = question.choices.filter(c => c.isCorrect).length > 1;
 };
 
-export default function QuizCard({ index, question, selectedChoiceId, onSelect, onShowHint, showHint }: Props) {
-
+export default function QuizCard({ index, question, selectedChoiceIds, onSelect, onShowHint, showHint }: Props) {
+  const isMultiple = question.choices.filter(c => c.isCorrect).length > 1;
 
   return (
     <Card sx={{ my: 2 }}>
       <CardContent>
+        {isMultiple && (
+          <Typography variant="caption" color="text.secondary" sx={{ mb: 1 }}>
+            Select all that apply
+          </Typography>
+        )}
         <Typography variant="h6" gutterBottom>
           {index + 1}. {question.text}
         </Typography>
@@ -39,7 +43,7 @@ export default function QuizCard({ index, question, selectedChoiceId, onSelect, 
           {question.choices.map((choice) => (
             <ListItem key={choice.id} disablePadding>
               <ListItemButton
-                selected={selectedChoiceId === choice.id}
+                selected={selectedChoiceIds?.includes(choice.id)}
                 onClick={() => onSelect(choice.id)}
               >
                 {choice.text}

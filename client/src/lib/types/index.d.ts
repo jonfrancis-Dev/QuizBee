@@ -29,7 +29,7 @@ export interface SubmittedAnswer {
 
 export interface AnswerSubmissionDto {
   questionId: string;
-  selectedChoiceId: string;
+  selectedChoiceIds: string[];
 }
 
 export interface SubmitPayload {

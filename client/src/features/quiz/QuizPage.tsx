@@ -1,4 +1,4 @@
-import { useState } from "react";
+ import { useState } from "react";
 import { useQuiz } from "../../lib/hooks/useQuiz";
 import QuizCard from "./QuizCard";
 import QuizNav from "./QuizNav";
@@ -13,28 +13,36 @@ export default function QuizPage() {
 
   const [email, setEmail] = useState('');
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [answers, setAnswers] = useState<Record<string, string[]>>({});
   const [showResults, setShowResults] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [hintShown, setHintShown] = useState<Record<string, boolean>>({});
-
 
   if (isLoading) return <Typography>Loading questions...</Typography>;
   if (!questions) return null;
 
   const current = questions[step];
-  const isHintShown = hintShown[current.id] || false; // So the hint can be toggled back on after next button
+  const isHintShown = hintShown[current.id] || false;
 
   const handleShowHint = () => {
     setHintShown(prev => ({ ...prev, [current.id]: true }));
   };
 
   const handleSelect = (choiceId: string) => {
-    setAnswers((prev) => ({ ...prev, [current.id]: choiceId }));
+    const currentAnswers = answers[current.id] || [];
+
+    const updatedAnswers = currentAnswers.includes(choiceId)
+      ? currentAnswers.filter(id => id !== choiceId)
+      : [...currentAnswers, choiceId];
+
+    setAnswers(prev => ({
+      ...prev,
+      [current.id]: updatedAnswers
+    }));
   };
 
   const handleSubmit = () => {
-    if (!email || Object.keys(answers).length < 10) { // Had to use Object.keys because answers is an object
+    if (!email || Object.keys(answers).length < 10) {
       setErrorMessage("Please enter your email and answer all questions.");
       return;
     }
@@ -42,9 +50,9 @@ export default function QuizPage() {
     mutate(
       {
         userEmail: email,
-        answers: Object.entries(answers).map(([questionId, selectedChoiceId]) => ({
+        answers: Object.entries(answers).map(([questionId, selectedChoiceIds]) => ({
           questionId,
-          selectedChoiceId,
+          selectedChoiceIds,
         })),
       },
       {
@@ -52,7 +60,6 @@ export default function QuizPage() {
       }
     );
   };
-
 
   if (showResults && result) {
     return (
@@ -62,8 +69,8 @@ export default function QuizPage() {
       />
     );
   }
-  return (
 
+  return (
     <Container maxWidth="sm">
       <Box mt={4}>
         <Typography variant="h4" align="center" gutterBottom>
@@ -89,7 +96,7 @@ export default function QuizPage() {
         <QuizCard
           question={current}
           index={step}
-          selectedChoiceId={answers[current.id]}
+          selectedChoiceIds={answers[current.id] || []}
           onSelect={handleSelect}
           showHint={isHintShown}
           onShowHint={handleShowHint}
@@ -100,8 +107,9 @@ export default function QuizPage() {
           total={questions.length}
           onNext={() => setStep((s) => s + 1)}
           onBack={() => setStep((s) => s - 1)}
-          disableNext={!answers[current.id]}
+          disableNext={!answers[current.id]?.length}
         />
+
         {step === questions.length - 1 && (
           <Box textAlign="center" mt={3}>
             <Button
@@ -118,7 +126,8 @@ export default function QuizPage() {
         {isError && isAxiosError(error) && (
           <Alert severity="error">
             {error.response?.data?.message || 'Submission failed.'}
-          </Alert>)}
+          </Alert>
+        )}
       </Box>
     </Container>
   );
