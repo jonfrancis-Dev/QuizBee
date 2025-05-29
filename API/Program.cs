@@ -1,3 +1,4 @@
+using Application.Quiz.Queries;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -11,6 +12,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("TemporaryConnection"));
 });
 
+// Add Mediatr for Getting Question List
+builder.Services.AddMediatR(x =>
+    x.RegisterServicesFromAssemblyContaining<GetQuestionsQuery.Handler>());
 
 var app = builder.Build();
 

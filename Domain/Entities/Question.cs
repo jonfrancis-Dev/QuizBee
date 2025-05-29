@@ -5,6 +5,7 @@ namespace Domain.Entities;
 
 public class Question
 {
+    // This table holds all the questions 
     [Key]
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public required string Text { get; set; } // Quiz Question
