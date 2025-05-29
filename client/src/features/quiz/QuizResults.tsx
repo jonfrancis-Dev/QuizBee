@@ -18,6 +18,9 @@ export default function QuizResults({ result, email }: Props) {
             <Typography variant="body1" gutterBottom>
                 Percentage: {result.percentage}%
             </Typography>
+            <Typography variant="body2" sx={{ mt: 2 }} color="text.secondary">
+                Thank you for playing! Only one attempt is allowed per user.
+            </Typography>
         </Box>
 
     );

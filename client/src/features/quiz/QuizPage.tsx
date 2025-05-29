@@ -1,4 +1,4 @@
- import { useState } from "react";
+import { useState } from "react";
 import { useQuiz } from "../../lib/hooks/useQuiz";
 import QuizCard from "./QuizCard";
 import QuizNav from "./QuizNav";
@@ -6,6 +6,8 @@ import { Container, Typography, Box, Alert, TextField, Button, CircularProgress 
 import QuizResults from "./QuizResults";
 import { useSubmitQuiz } from "../../lib/hooks/useSubmitQuiz";
 import { isAxiosError } from "axios";
+import isValidEmail from "../../lib/utils/EmailValidator";
+import { Bolt } from "@mui/icons-material";
 
 export default function QuizPage() {
   const { data: questions, isLoading } = useQuiz();
@@ -42,8 +44,14 @@ export default function QuizPage() {
   };
 
   const handleSubmit = () => {
-    if (!email || Object.keys(answers).length < 10) {
-      setErrorMessage("Please enter your email and answer all questions.");
+
+    if (!isValidEmail(email)) {
+      setErrorMessage("Please enter a valid email address.");
+      return;
+    }
+
+    if (Object.keys(answers).length < 10) {
+      setErrorMessage("Please answer all questions before submitting.");
       return;
     }
 
@@ -73,9 +81,13 @@ export default function QuizPage() {
   return (
     <Container maxWidth="sm">
       <Box mt={4}>
-        <Typography variant="h4" align="center" gutterBottom>
-          QuizBee 🐝
-        </Typography>
+        <Box display='flex' sx={{justifyContent:'center'}}>
+          <Typography variant="h4" align="center" gutterBottom color="#182a73">
+            QuizBee
+          </Typography>
+          <Bolt fontSize="large" sx={{color:"#182a73"}} />
+        </Box>
+
 
         {errorMessage && (
           <Alert severity="error" sx={{ mb: 2 }}>
@@ -89,8 +101,12 @@ export default function QuizPage() {
           variant="outlined"
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (errorMessage) setErrorMessage(""); // Clear error as user types
+          }}
           sx={{ mb: 3 }}
+          error={!!errorMessage}
         />
 
         <QuizCard
