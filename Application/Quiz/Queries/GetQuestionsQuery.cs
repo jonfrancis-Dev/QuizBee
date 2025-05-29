@@ -4,7 +4,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using Persistence.Migrations;
+//using Persistence.Migrations;
 
 namespace Application.Quiz.Queries;
 

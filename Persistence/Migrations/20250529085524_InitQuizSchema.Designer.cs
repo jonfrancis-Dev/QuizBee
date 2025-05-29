@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250529014930_AddQuizSubmissionEntities")]
-    partial class AddQuizSubmissionEntities
+    [Migration("20250529085524_InitQuizSchema")]
+    partial class InitQuizSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,26 @@ namespace Persistence.Migrations
                     b.ToTable("AnswerChoices");
                 });
 
+            modelBuilder.Entity("Domain.Entities.AnswerSelection", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AnswerChoiceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SubmittedAnswerId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnswerChoiceId");
+
+                    b.HasIndex("SubmittedAnswerId");
+
+                    b.ToTable("AnswerSelections");
+                });
+
             modelBuilder.Entity("Domain.Entities.Question", b =>
                 {
                     b.Property<string>("Id")
@@ -67,6 +87,9 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("SubmittedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("TotalScore")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("UserEmail")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -81,19 +104,13 @@ namespace Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("QuestionId")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("QuizSubmissionId")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SelectedChoiceId")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -117,25 +134,34 @@ namespace Persistence.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("Domain.Entities.AnswerSelection", b =>
+                {
+                    b.HasOne("Domain.Entities.AnswerChoice", "AnswerChoice")
+                        .WithMany()
+                        .HasForeignKey("AnswerChoiceId");
+
+                    b.HasOne("SubmittedAnswer", "SubmittedAnswer")
+                        .WithMany("SelectedChoices")
+                        .HasForeignKey("SubmittedAnswerId");
+
+                    b.Navigation("AnswerChoice");
+
+                    b.Navigation("SubmittedAnswer");
+                });
+
             modelBuilder.Entity("SubmittedAnswer", b =>
                 {
                     b.HasOne("Domain.Entities.Question", "Question")
                         .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("QuestionId");
 
                     b.HasOne("QuizSubmission", "QuizSubmission")
                         .WithMany("SubmittedAnswers")
-                        .HasForeignKey("QuizSubmissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("QuizSubmissionId");
 
                     b.HasOne("Domain.Entities.AnswerChoice", "SelectedChoice")
                         .WithMany()
-                        .HasForeignKey("SelectedChoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SelectedChoiceId");
 
                     b.Navigation("Question");
 
@@ -152,6 +178,11 @@ namespace Persistence.Migrations
             modelBuilder.Entity("QuizSubmission", b =>
                 {
                     b.Navigation("SubmittedAnswers");
+                });
+
+            modelBuilder.Entity("SubmittedAnswer", b =>
+                {
+                    b.Navigation("SelectedChoices");
                 });
 #pragma warning restore 612, 618
         }
