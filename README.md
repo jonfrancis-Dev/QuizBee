@@ -38,11 +38,12 @@ QuizBee is a full-stack quiz application built with React, TypeScript, and ASP.N
 ### Backend
 
 ```bash
-cd API
 
 dotnet build
 
-dotnet ef database update
+dotnet ef database update --project Persistence --startup-project API
+
+cd API
 
 dotnet run
 ```
