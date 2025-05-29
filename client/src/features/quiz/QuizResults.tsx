@@ -1,8 +1,7 @@
 import { Box, Typography } from '@mui/material';
-import type { AnswerSubmissionDto, QuizSubmission } from '../../lib/types';
+import type { QuizSubmission } from '../../lib/types';
 
 type Props = {
-    answers: AnswerSubmissionDto[];
     result: QuizSubmission;
     email: string;
 };
