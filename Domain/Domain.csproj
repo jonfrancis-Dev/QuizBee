@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="Entities\AnswerSelection.cs" />
+  </ItemGroup>
+
 </Project>

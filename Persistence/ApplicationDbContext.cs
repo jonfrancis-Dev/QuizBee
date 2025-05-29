@@ -9,6 +9,7 @@ public class ApplicationDbContext(DbContextOptions options) : DbContext(options)
     public DbSet<AnswerChoice> AnswerChoices { get; set; }
     public DbSet<QuizSubmission> QuizSubmissions { get; set; }
     public DbSet<SubmittedAnswer> SubmittedAnswers { get; set; }
+    public DbSet<AnswerSelection> AnswerSelections { get; set; } 
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -24,15 +25,20 @@ public class ApplicationDbContext(DbContextOptions options) : DbContext(options)
             .HasMany(qs => qs.SubmittedAnswers)
             .WithOne(sa => sa.QuizSubmission!)
             .HasForeignKey(sa => sa.QuizSubmissionId);
-   
+
         builder.Entity<SubmittedAnswer>()
             .HasOne(sa => sa.Question)
             .WithMany()
             .HasForeignKey(sa => sa.QuestionId);
 
-        builder.Entity<SubmittedAnswer>()
-            .HasOne(sa => sa.SelectedChoice)
+        builder.Entity<AnswerSelection>()
+            .HasOne(x => x.SubmittedAnswer)
+            .WithMany(sa => sa.SelectedChoices)
+            .HasForeignKey(x => x.SubmittedAnswerId);
+
+        builder.Entity<AnswerSelection>()
+            .HasOne(x => x.AnswerChoice)
             .WithMany()
-            .HasForeignKey(sa => sa.SelectedChoiceId);
+            .HasForeignKey(x => x.AnswerChoiceId);
     }
 }
