@@ -245,9 +245,35 @@ public class DbInitializer
                     new () {Id = Guid.NewGuid().ToString(), Text="Niagara Falls", IsCorrect = false}
                 }
         };
+        var q19 = new Question
+        {
+            Id = Guid.NewGuid().ToString(),
+            Text = "Which of the following are programming languages?",
+            Hint = "You may use them in a code editor.",
+            Choices = new List<AnswerChoice>
+                {
+                    new() { Id = Guid.NewGuid().ToString(), Text = "Python", IsCorrect = true },
+                    new() { Id = Guid.NewGuid().ToString(), Text = "HTML", IsCorrect = false },
+                    new() { Id = Guid.NewGuid().ToString(), Text = "Java", IsCorrect = true },
+                    new() { Id = Guid.NewGuid().ToString(), Text = "CSS", IsCorrect = false }
+                }
+        };
+        var q20 = new Question
+        {
+            Id = Guid.NewGuid().ToString(),
+            Text = "Select all prime numbers:",
+            Hint = "They are only divisible by 1 and themselves.",
+            Choices = new List<AnswerChoice>
+                {
+                    new() { Id = Guid.NewGuid().ToString(), Text = "2", IsCorrect = true },
+                    new() { Id = Guid.NewGuid().ToString(), Text = "4", IsCorrect = false },
+                    new() { Id = Guid.NewGuid().ToString(), Text = "5", IsCorrect = true },
+                    new() { Id = Guid.NewGuid().ToString(), Text = "9", IsCorrect = false }
+                }
+        };
 
         // Add all questions to the List
-        questions.AddRange(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18);
+        questions.AddRange(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19,q20);
 
         await context.Questions.AddRangeAsync(questions);
         await context.SaveChangesAsync();

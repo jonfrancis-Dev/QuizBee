@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, List, ListItem, ListItemButton } from "@mui/material";
+import { Card, CardContent, Typography, List, ListItem, ListItemButton, Button } from "@mui/material";
 import type { Question } from "../../lib/types";
 
 type Props = {
@@ -6,16 +6,30 @@ type Props = {
   question: Question;
   selectedChoiceId?: string;
   onSelect: (choiceId: string) => void;
+  showHint: boolean;
+  onShowHint: () => void;
 };
 
-export default function QuizCard({ index, question, selectedChoiceId, onSelect }: Props) {
+export default function QuizCard({ index, question, selectedChoiceId, onSelect, onShowHint, showHint }: Props) {
+
+
   return (
     <Card sx={{ my: 2 }}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
           {index + 1}. {question.text}
         </Typography>
-        {question.hint && (
+        {question.hint && !showHint && (
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={onShowHint}
+            sx={{ mb: 2 }}
+          >
+            Show Hint
+          </Button>
+        )}
+        {showHint && question.hint && (
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             Hint: {question.hint}
           </Typography>

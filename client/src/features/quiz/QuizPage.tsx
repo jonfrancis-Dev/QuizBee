@@ -16,12 +16,18 @@ export default function QuizPage() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [showResults, setShowResults] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [hintShown, setHintShown] = useState<Record<string, boolean>>({});
 
 
   if (isLoading) return <Typography>Loading questions...</Typography>;
   if (!questions) return null;
 
   const current = questions[step];
+  const isHintShown = hintShown[current.id] || false; // So the hint can be toggled back on after next button
+
+  const handleShowHint = () => {
+    setHintShown(prev => ({ ...prev, [current.id]: true }));
+  };
 
   const handleSelect = (choiceId: string) => {
     setAnswers((prev) => ({ ...prev, [current.id]: choiceId }));
@@ -48,19 +54,16 @@ export default function QuizPage() {
   };
 
 
-if (showResults && result) {
+  if (showResults && result) {
+    return (
+      <QuizResults
+        result={result}
+        email={email}
+      />
+    );
+  }
   return (
-    <QuizResults
-      answers={Object.entries(answers).map(([questionId, selectedChoiceId]) => ({
-        questionId,
-        selectedChoiceId
-      }))}
-      result={result}
-      email={email}
-    />
-  );
-}
-  return (
+
     <Container maxWidth="sm">
       <Box mt={4}>
         <Typography variant="h4" align="center" gutterBottom>
@@ -88,6 +91,8 @@ if (showResults && result) {
           index={step}
           selectedChoiceId={answers[current.id]}
           onSelect={handleSelect}
+          showHint={isHintShown}
+          onShowHint={handleShowHint}
         />
 
         <QuizNav
@@ -97,7 +102,7 @@ if (showResults && result) {
           onBack={() => setStep((s) => s - 1)}
           disableNext={!answers[current.id]}
         />
-                {step === questions.length - 1 && (
+        {step === questions.length - 1 && (
           <Box textAlign="center" mt={3}>
             <Button
               variant="contained"
