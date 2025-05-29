@@ -15,7 +15,7 @@ export default function QuizNav({ step, total, onNext, onBack, disableNext }: Pr
         Back
       </Button>
       <Button variant="contained" onClick={onNext} disabled={disableNext}>
-        {step === total - 1 ? "Submit" : "Next"}
+        {step === total - 1 ? "Finish" : "Next"}
       </Button>
     </Box>
   );

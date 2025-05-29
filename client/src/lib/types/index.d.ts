@@ -16,7 +16,7 @@ export interface QuizSubmission {
   id: string;
   userEmail: string;
   submittedAt: string;
-  totalScore: number;
+  score: number;
   percentage: number;
   submittedAnswers: SubmittedAnswer[];
 }
@@ -25,4 +25,14 @@ export interface SubmittedAnswer {
   id: string;
   questionId: string;
   selectedChoiceId: string;
+}
+
+export interface AnswerSubmissionDto {
+  questionId: string;
+  selectedChoiceId: string;
+}
+
+export interface SubmitPayload {
+  userEmail: string;
+  answers: AnswerSubmissionDto[];
 }
