@@ -12,7 +12,7 @@ public class DbInitializer
 
         var questions = new List<Question>();
 
-        // Could probably make this more concise if needed later
+        // Could probably make this more concise if needed later (e.g var questions = new List<Question> {})
         var q1 = new Question
         {
             Id = Guid.NewGuid().ToString(),
