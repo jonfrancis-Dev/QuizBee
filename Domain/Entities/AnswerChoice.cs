@@ -11,6 +11,6 @@ public class AnswerChoice
     public required string Text { get; set; } // Answer Choice (e.g "Track and Field")
     public bool IsCorrect { get; set; }
     [ForeignKey("QuestionId")]
-    public required string QuestionId { get; set; } // Foreign Key to the Question
-    public required Question Question { get; set; }
+    public string? QuestionId { get; set; } // Foreign Key to the Question
+    public Question? Question { get; set; }
 }
